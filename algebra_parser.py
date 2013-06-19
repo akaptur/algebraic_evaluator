@@ -12,20 +12,21 @@ class Evaluator(object):
 
     """
 
+    LOW_PREC, HIGH_PREC = 1, 2
+
     def __init__(self):
         self.operators = {}
         # initialize with default operators
-        self.add_operator('-', 1, lambda x, y: x - y)
-        self.add_operator('+', 1, lambda x, y: x + y)
-        self.add_operator('*', 2, lambda x, y: x * y)
-        self.add_operator('/', 2, lambda x, y: x / y)
+        self.add_operator('-', self.LOW_PREC, lambda x, y: x - y)
+        self.add_operator('+', self.LOW_PREC, lambda x, y: x + y)
+        self.add_operator('*', self.HIGH_PREC, lambda x, y: x * y)
+        self.add_operator('/', self.HIGH_PREC, lambda x, y: x / y)
         self.final_exp = []
         self.operator_stack = []
 
     def add_operator(self, op_string, precedence, fn):
-        assert precedence in [1, 2] # only two options for operator precedence
+        assert precedence in [self.LOW_PREC, self.HIGH_PREC] # only two options for operator precedence
         self.operators[op_string] = {"precedence" : precedence, "operation" : fn}
-
 
     def evaluate(self, exp):
         self.parse_helper(exp)
