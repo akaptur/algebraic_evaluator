@@ -14,7 +14,6 @@ class Evaluator(object):
 
     """
     def __init__(self):
-        self.operators = ["-", "+", "*", "/"]
         self.precedence = {"-": 1, "+": 1, "*": 2, "/": 2}
         self.op_convert = {"-": lambda x, y: x - y,
                       "+": lambda x, y: x + y,
@@ -37,7 +36,7 @@ class Evaluator(object):
         else:  # more to go
             _next = post[0]
             if prior:  # prior is not none
-                if not _next in self.operators:  # if is number
+                if not _next in self.op_covert.keys():  # if is number
                     self.parse_helper(post[1:], prior * 10 + int(_next)) #AK: what is this 10?
                 else:  # if it is an operator
                     self.final_exp.append(prior)
