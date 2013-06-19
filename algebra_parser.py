@@ -66,7 +66,7 @@ class Evaluator(object):
                 self.operator_stack.append(_next)
                 self.parse_helper(post[1:])
             else:
-                self.parse_helper(post[1:], int(_next))
+                self.parse_helper(post[1:], _next)
 
     def pop_and_eval(self, op):
         v2 = self.final_exp.pop()
