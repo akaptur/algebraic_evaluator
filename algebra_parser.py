@@ -55,18 +55,19 @@ class Evaluator(object):
                 for item in self.operator_stack:
                     self.pop_and_eval(item)
         else:  # more to go
-            _next = post[0]
             if prior is not None:
+                next_op = post[0]
                 self.final_exp.append(prior)
                 while (self.operator_stack and
                        self.operators[self.operator_stack[-1]]["precedence"] >=
-                       self.operators[_next]["precedence"]):
+                       self.operators[next_op]["precedence"]):
                     op = self.operator_stack.pop()
                     self.pop_and_eval(op)
-                self.operator_stack.append(_next)
+                self.operator_stack.append(next_op)
                 self.parse_helper(post[1:])
             else:
-                self.parse_helper(post[1:], _next)
+                next_num = post[0]
+                self.parse_helper(post[1:], next_num)
 
     def pop_and_eval(self, op):
         v2 = self.final_exp.pop()
