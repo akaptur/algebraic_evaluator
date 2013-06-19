@@ -41,7 +41,7 @@ class Evaluator(object):
                     self.pop_and_eval(item)
         else:  # more to go
             _next = post[0]
-            if prior:  # prior is not none
+            if prior is not None:
                 if not _next in self.operators.keys():  # if is number
                     self.parse_helper(post[1:], prior * 10 + int(_next)) #AK: what is this 10?
                 else:  # if it is an operator
