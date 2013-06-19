@@ -36,6 +36,7 @@ class Evaluator(object):
         return self.final_exp[0]
 
     def tokenize(self, exp):
+        """ Tokenizes expression into numbers and operators."""
         if not exp:
             return []
         digits_check = re.findall("(^\d+)(.*)", exp)
