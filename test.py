@@ -14,8 +14,8 @@ def test_multi_digit_num():
 
 def test_tokenizer():
     e = a.Evaluator()
-    assert e.tokenize('2*3+4') == ['2', '*', '3', '+', '4']
-    assert e.tokenize('55*3+4') == ['55', '*', '3', '+', '4']
+    assert e.tokenize('2*3+4') == [2, '*', 3, '+', 4]
+    assert e.tokenize('55*3+4') == [55, '*', 3, '+', 4]
     assert e.tokenize('') == []
     try:
         e.tokenize('$')

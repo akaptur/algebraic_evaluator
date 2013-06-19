@@ -42,7 +42,7 @@ class Evaluator(object):
         digits_check = re.findall("(^\d+)(.*)", exp)
         if digits_check:
             token, rest = digits_check[0]
-            return [token] + self.tokenize(rest)
+            return [int(token)] + self.tokenize(rest)
         if exp[0] in self.operators.keys():
             return [exp[0]] + self.tokenize(exp[1:])
         raise Exception("Invalid character in expression, cannot tokenize")
