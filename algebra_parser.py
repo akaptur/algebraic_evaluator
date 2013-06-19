@@ -48,6 +48,9 @@ class Evaluator(object):
         raise Exception("Invalid character in expression, cannot tokenize")
 
     def parse_helper(self, post, prior=None):
+        print "Parse helper: ", post, prior
+        print "operator stack: ", self.operator_stack
+        print "final_exp: ", self.final_exp
         if not post:  # base case, end of recursion
             self.final_exp.append(prior)  # out of numbers, put prior into exp
             if self.operator_stack:
@@ -58,6 +61,7 @@ class Evaluator(object):
             if prior is not None:
                 next_op = post[0]
                 self.final_exp.append(prior)
+                print "just before while: ", self.final_exp
                 while (self.operator_stack and
                        self.operators[self.operator_stack[-1]]["precedence"] >=
                        self.operators[next_op]["precedence"]):
