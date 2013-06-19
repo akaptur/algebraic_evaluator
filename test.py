@@ -4,5 +4,10 @@ def test_parser():
     e = a.Evaluator()
     assert e.evaluate('2*3+1') == 7
 
+def test_whitespace():
+    e = a.Evaluator()
+    assert e.evaluate('2 * 3 + 1') == 7
+
 if __name__ == '__main__':
     test_parser()
+    test_whitespace()
