@@ -23,7 +23,7 @@ def parse(exp):
     final_exp = []
     operator_stack = []
 
-    def parse_helper(prior, post):
+    def parse_helper(post, prior=None):
         if not post:  # base case, end of recursion
             final_exp.append(prior)  # out of numbers, put prior into exp
             if operator_stack:
@@ -34,7 +34,7 @@ def parse(exp):
             _next = post[0]
             if prior:  # prior is not none
                 if not _next in operators:  # if is number
-                    parse_helper(prior * 10 + int(_next), post[1:])
+                    parse_helper(post[1:], prior * 10 + int(_next))
                 else:  # if it is an operator
                     final_exp.append(prior)
                     while (operator_stack and
@@ -43,14 +43,14 @@ def parse(exp):
                         op = operator_stack.pop()
                         pop_and_eval(op)
                     operator_stack.append(_next)
-                    parse_helper(None, post[1:])
+                    parse_helper(post[1:])
             else:
-                parse_helper(int(_next), post[1:])
+                parse_helper(post[1:], int(_next))
 
     def pop_and_eval(op):
         v2 = final_exp.pop()
         v1 = final_exp.pop()
         final_exp.append(op_convert[op](v1, v2))
 
-    parse_helper(None, exp)
+    parse_helper(exp)
     return final_exp[0]
