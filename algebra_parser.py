@@ -3,8 +3,7 @@
 
 """Simple algebraic parser (without using eval)"""
 
-
-def parse(exp):
+class Evaluator(object):
     """algebra-parser.parse:: parse(String)
 
     Takes a string and returns the evaluated expression as int.
@@ -14,43 +13,47 @@ def parse(exp):
     Ugly as sin.
 
     """
-    operators = ["-", "+", "*", "/"]
-    precedence = {"-": 1, "+": 1, "*": 2, "/": 2}
-    op_convert = {"-": lambda x, y: x - y,
-                  "+": lambda x, y: x + y,
-                  "*": lambda x, y: x * y,
-                  "/": lambda x, y: x / y}
-    final_exp = []
-    operator_stack = []
+    def __init__(self):
+        self.operators = ["-", "+", "*", "/"]
+        self.precedence = {"-": 1, "+": 1, "*": 2, "/": 2}
+        self.op_convert = {"-": lambda x, y: x - y,
+                      "+": lambda x, y: x + y,
+                      "*": lambda x, y: x * y,
+                      "/": lambda x, y: x / y}
+        self.final_exp = []
+        self.operator_stack = []
 
-    def parse_helper(post, prior=None):
+    def evaluate(self, exp):
+        self.parse_helper(exp)
+        return self.final_exp[0]
+
+    def parse_helper(self, post, prior=None):
         if not post:  # base case, end of recursion
-            final_exp.append(prior)  # out of numbers, put prior into exp
-            if operator_stack:
-                operator_stack.reverse()
-                for item in operator_stack:
-                    pop_and_eval(item)
+            self.final_exp.append(prior)  # out of numbers, put prior into exp
+            if self.operator_stack:
+                self.operator_stack.reverse()
+                for item in self.operator_stack:
+                    self.pop_and_eval(item)
         else:  # more to go
             _next = post[0]
             if prior:  # prior is not none
-                if not _next in operators:  # if is number
-                    parse_helper(post[1:], prior * 10 + int(_next))
+                if not _next in self.operators:  # if is number
+                    self.parse_helper(post[1:], prior * 10 + int(_next)) #AK: what is this 10?
                 else:  # if it is an operator
-                    final_exp.append(prior)
-                    while (operator_stack and
-                           precedence[operator_stack[-1]] >=
-                           precedence[_next]):
-                        op = operator_stack.pop()
-                        pop_and_eval(op)
-                    operator_stack.append(_next)
-                    parse_helper(post[1:])
+                    self.final_exp.append(prior)
+                    while (self.operator_stack and
+                           self.precedence[self.operator_stack[-1]] >=
+                           self.precedence[_next]):
+                        op = self.operator_stack.pop()
+                        self.pop_and_eval(op)
+                    self.operator_stack.append(_next)
+                    self.parse_helper(post[1:])
             else:
-                parse_helper(post[1:], int(_next))
+                self.parse_helper(post[1:], int(_next))
 
-    def pop_and_eval(op):
-        v2 = final_exp.pop()
-        v1 = final_exp.pop()
-        final_exp.append(op_convert[op](v1, v2))
+    def pop_and_eval(self, op):
+        v2 = self.final_exp.pop()
+        v1 = self.final_exp.pop()
+        self.final_exp.append(self.op_convert[op](v1, v2))
 
-    parse_helper(exp)
-    return final_exp[0]
+
