@@ -14,11 +14,10 @@ class Evaluator(object):
 
     """
     def __init__(self):
-        self.precedence = {"-": 1, "+": 1, "*": 2, "/": 2}
-        self.operators = {"-": lambda x, y: x - y,
-                      "+": lambda x, y: x + y,
-                      "*": lambda x, y: x * y,
-                      "/": lambda x, y: x / y}
+        self.operators = {"-": {"precedence": 1, "operation": lambda x, y: x - y},
+                      "+": {"precedence": 1, "operation": lambda x, y: x + y},
+                      "*": {"precedence": 2, "operation": lambda x, y: x * y},
+                      "/": {"precedence": 2, "operation": lambda x, y: x / y}}
         self.final_exp = []
         self.operator_stack = []
 
@@ -41,8 +40,8 @@ class Evaluator(object):
                 else:  # if it is an operator
                     self.final_exp.append(prior)
                     while (self.operator_stack and
-                           self.precedence[self.operator_stack[-1]] >=
-                           self.precedence[_next]):
+                           self.operators[self.operator_stack[-1]]["precedence"] >=
+                           self.operators[_next]["precedence"]):
                         op = self.operator_stack.pop()
                         self.pop_and_eval(op)
                     self.operator_stack.append(_next)
@@ -53,6 +52,6 @@ class Evaluator(object):
     def pop_and_eval(self, op):
         v2 = self.final_exp.pop()
         v1 = self.final_exp.pop()
-        self.final_exp.append(self.operators[op](v1, v2))
+        self.final_exp.append(self.operators[op]["operation"](v1, v2))
 
 
