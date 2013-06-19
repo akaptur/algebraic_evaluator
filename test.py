@@ -33,6 +33,7 @@ def test_tokenizer():
     assert e.tokenize('') == []
     try:
         e.tokenize('$')
+        assert False # make sure this block fails one way or another!
     except Exception as e:
         assert e.message == "Invalid character in expression, cannot tokenize"
 
