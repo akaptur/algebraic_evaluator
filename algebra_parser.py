@@ -10,8 +10,6 @@ class Evaluator(object):
     Uses Shunting-Yard algorithm.
     Example: parse('1+3*2') => 7
 
-    Ugly as sin.
-
     """
 
     def __init__(self):
