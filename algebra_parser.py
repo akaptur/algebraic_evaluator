@@ -1,6 +1,7 @@
 # algebra_parser.py
 # James Wang and Katherine Ye, 18 Jun 2013
 
+import re
 """Simple algebraic parser (without using eval)"""
 
 class Evaluator(object):
@@ -32,6 +33,17 @@ class Evaluator(object):
         exp = "".join(exp.split())
         self.parse_helper(exp)
         return self.final_exp[0]
+
+    def tokenize(self, exp):
+        if not exp:
+            return []
+        digits_check = re.findall("(^\d+)(.*)", exp)
+        if digits_check:
+            token, rest = digits_check[0]
+            return [token] + self.tokenize(rest)
+        if exp[0] in self.operators.keys():
+            return [exp[0]] + self.tokenize(exp[1:])
+        raise Exception("Invalid character in expression, cannot tokenize")
 
     def parse_helper(self, post, prior=None):
         if not post:  # base case, end of recursion
