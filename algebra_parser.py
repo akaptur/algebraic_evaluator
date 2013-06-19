@@ -13,13 +13,21 @@ class Evaluator(object):
     Ugly as sin.
 
     """
+
     def __init__(self):
-        self.operators = {"-": {"precedence": 1, "operation": lambda x, y: x - y},
-                      "+": {"precedence": 1, "operation": lambda x, y: x + y},
-                      "*": {"precedence": 2, "operation": lambda x, y: x * y},
-                      "/": {"precedence": 2, "operation": lambda x, y: x / y}}
+        self.operators = {}
+        # initialize with default operators
+        self.add_operator('-', 1, lambda x, y: x - y)
+        self.add_operator('+', 1, lambda x, y: x + y)
+        self.add_operator('*', 2, lambda x, y: x * y)
+        self.add_operator('/', 2, lambda x, y: x / y)
         self.final_exp = []
         self.operator_stack = []
+
+    def add_operator(self, op_string, precedence, fn):
+        assert precedence in [1, 2] # only two options for operator precedence
+        self.operators[op_string] = {"precedence" : precedence, "operation" : fn}
+
 
     def evaluate(self, exp):
         self.parse_helper(exp)
