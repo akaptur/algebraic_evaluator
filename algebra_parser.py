@@ -29,6 +29,7 @@ class Evaluator(object):
         self.operators[op_string] = {"precedence" : precedence, "operation" : fn}
 
     def evaluate(self, exp):
+        exp = "".join(exp.split())
         self.parse_helper(exp)
         return self.final_exp[0]
 
