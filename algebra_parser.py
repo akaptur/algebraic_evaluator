@@ -31,7 +31,8 @@ class Evaluator(object):
 
     def evaluate(self, exp):
         exp = "".join(exp.split())
-        self.parse_helper(exp)
+        tokens = self.tokenize(exp)
+        self.parse_helper(tokens)
         return self.final_exp[0]
 
     def tokenize(self, exp):
@@ -55,17 +56,14 @@ class Evaluator(object):
         else:  # more to go
             _next = post[0]
             if prior is not None:
-                if not _next in self.operators.keys():  # if is number
-                    self.parse_helper(post[1:], prior * 10 + int(_next)) #AK: what is this 10?
-                else:  # if it is an operator
-                    self.final_exp.append(prior)
-                    while (self.operator_stack and
-                           self.operators[self.operator_stack[-1]]["precedence"] >=
-                           self.operators[_next]["precedence"]):
-                        op = self.operator_stack.pop()
-                        self.pop_and_eval(op)
-                    self.operator_stack.append(_next)
-                    self.parse_helper(post[1:])
+                self.final_exp.append(prior)
+                while (self.operator_stack and
+                       self.operators[self.operator_stack[-1]]["precedence"] >=
+                       self.operators[_next]["precedence"]):
+                    op = self.operator_stack.pop()
+                    self.pop_and_eval(op)
+                self.operator_stack.append(_next)
+                self.parse_helper(post[1:])
             else:
                 self.parse_helper(post[1:], int(_next))
 
